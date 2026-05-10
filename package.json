@@ -9,6 +9,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "preview:dist": "npm run build && astro preview",
     "astro": "astro"
   },
   "dependencies": {
