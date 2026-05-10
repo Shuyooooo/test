@@ -1,5 +1,9 @@
 # 推送到 main 后自动构建并发布到 GitHub Pages（无需自己的服务器）
-# 仓库 Settings → Pages → Build and deployment → Source 选「GitHub Actions」
+#
+# 必做（否则会一直 404）：
+# 1. 仓库 Settings → Pages → Build and deployment → Source 选「GitHub Actions」（不要选 Deploy from a branch）
+# 2. Settings → Environments → github-pages：若有 “Required reviewers”，首次部署需在 Actions 里点批准
+# 3. 站点地址为 https://<用户名>.github.io/<仓库名>/ （本仓库即 /test/）
 name: Deploy to GitHub Pages
 
 on:
@@ -12,6 +16,10 @@ permissions:
   pages: write
   id-token: write
 
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -20,8 +28,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Install, build, and upload
         uses: withastro/action@v6
-        # with:
-        #   node-version: 22
+        with:
+          node-version: 22
 
   deploy:
     needs: build
